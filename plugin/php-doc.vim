@@ -138,6 +138,7 @@ if !exists('g:pdv_cfg_annotation_Copyright') | let g:pdv_cfg_annotation_Copyrigh
 if !exists('g:pdv_cfg_annotation_License') | let g:pdv_cfg_annotation_License = 1 | endif
 
 " Functions/variables tags
+if !exists('g:pdv_cfg_InsertClassName') | let g:pdv_cfg_InsertClassName = 1 | endif
 if !exists('g:pdv_cfg_InsertFuncName') | let g:pdv_cfg_InsertFuncName = 1 | endif
 if !exists('g:pdv_cfg_InsertVarName') | let g:pdv_cfg_InsertVarName = 1 | endif
 
@@ -565,8 +566,10 @@ func! PhpDocClass()
     let l:txtBOL = g:pdv_cfg_BOL . l:indent
 
     exe l:txtBOL . g:pdv_cfg_CommentHead . g:pdv_cfg_EOL
-    exe l:txtBOL . g:pdv_cfg_Comment1 . l:classname . g:pdv_cfg_EOL
-    exe l:txtBOL . g:pdv_cfg_CommentBlank . g:pdv_cfg_EOL
+    if g:pdv_cfg_InsertClassName == 1
+        exe l:txtBOL . g:pdv_cfg_Comment1 . l:classname . g:pdv_cfg_EOL
+        exe l:txtBOL . g:pdv_cfg_CommentBlank . g:pdv_cfg_EOL
+    endif
     if l:extends != "" && l:extends != "implements"
         exe l:txtBOL . g:pdv_cfg_Commentn . "@uses " . l:extends . g:pdv_cfg_EOL
     endif
