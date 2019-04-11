@@ -89,8 +89,6 @@ if !exists('g:pdv_cfg_Commentn') | let g:pdv_cfg_Commentn = " * " | endif
 if !exists('g:pdv_cfg_CommentBlank') | let g:pdv_cfg_CommentBlank = " *" | endif
 if !exists('g:pdv_cfg_CommentTail') | let g:pdv_cfg_CommentTail = " */" | endif
 if !exists('g:pdv_cfg_CommentSingle') | let g:pdv_cfg_CommentSingle = "//" | endif
-if !exists('g:pdv_cfg_InsertFuncName') | let g:pdv_cfg_InsertFuncName = 1 | endif
-if !exists('g:pdv_cfg_InsertVarName') | let g:pdv_cfg_InsertVarName = 1 | endif
 if !exists('g:pdv_cfg_FuncCommentEnd') | let g:pdv_cfg_FuncCommentEnd = " // End function" | endif
 if !exists('g:pdv_cfg_ClassCommentEnd') | let g:pdv_cfg_ClassCommentEnd = " // End" | endif
 if !exists('g:pdv_cfg_VariableTypeTag') | let g:pdv_cfg_VariableTypeTag = "@var" | endif
@@ -139,7 +137,14 @@ if !exists('g:pdv_cfg_annotation_Author') | let g:pdv_cfg_annotation_Author = 1 
 if !exists('g:pdv_cfg_annotation_Copyright') | let g:pdv_cfg_annotation_Copyright = 1 | endif
 if !exists('g:pdv_cfg_annotation_License') | let g:pdv_cfg_annotation_License = 1 | endif
 
-"
+" Functions/variables tags
+if !exists('g:pdv_cfg_InsertFuncName') | let g:pdv_cfg_InsertFuncName = 1 | endif
+if !exists('g:pdv_cfg_InsertVarName') | let g:pdv_cfg_InsertVarName = 1 | endif
+
+" Insert a comment at end of a function/class
+if !exists('g:pdv_cfg_InsertFuncCommentEnd') | let g:pdv_cfg_InsertFuncCommentEnd = 1 | endif
+if !exists('g:pdv_cfg_InsertClassCommentEnd') | let g:pdv_cfg_InsertClassCommentEnd = 1 | endif
+
 " Regular expressions
 "
 
@@ -295,13 +300,17 @@ endfunc
 
 " {{{ PhpDocFuncEnd()
 func! PhpDocFuncEnd()
-
+    if g:pdv_cfg_InsertFuncCommentEnd == 0 
+        return 0
+    endif
     call setline(line('.'), getline('.') . g:pdv_cfg_FuncCommentEnd)
 endfunc
 " }}}
 " {{{ PhpDocFuncEndAuto()
 func! PhpDocFuncEndAuto(funcname)
-
+    if g:pdv_cfg_InsertFuncCommentEnd == 0 
+        return 0
+    endif
     call search('{')
     call searchpair('{', '', '}')
     call setline(line('.'), getline('.') . g:pdv_cfg_FuncCommentEnd . ' ' . a:funcname)
@@ -311,13 +320,17 @@ endfunc
 
 " {{{ PhpDocClassEnd()
 func! PhpDocClassEnd(classtype, classname)
-
+    if g:pdv_cfg_InsertClassCommentEnd == 0 
+        return 0
+    endif
     call setline(line('.'), getline('.') . g:pdv_cfg_ClassCommentEnd . ' ' . a:classtype . ' ' . a:classname)
 endfunc
 " }}}
 " {{{ PhpDocClassEndAuto()
 func! PhpDocClassEndAuto(classtype, classname)
-
+    if g:pdv_cfg_InsertClassCommentEnd == 0 
+        return 0
+    endif
     call search('{')
     call searchpair('{', '', '}')
     return PhpDocClassEnd(a:classtype, a:classname)
