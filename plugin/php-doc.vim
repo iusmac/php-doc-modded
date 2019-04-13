@@ -375,6 +375,8 @@ func! PhpDocFunc(end_line)
     let l:abstract = g:pdv_cfg_php4always == 1 ? matchstr(l:modifier, g:pdv_re_abstract) : ""
     let l:final = g:pdv_cfg_php4always == 1 ? matchstr(l:modifier, g:pdv_re_final) : ""
     let l:returnType = substitute (l:name, g:pdv_re_func, '\4', "g")
+    " Nullable types for PHP7.1 
+    let l:returnType = substitute (l:returnType, "?", "null|", "")
 
     if l:returnType == ""
         let l:returnType = g:pdv_cfg_ReturnVal
@@ -401,6 +403,8 @@ func! PhpDocFunc(end_line)
         let l:parameters = substitute (l:parameters, '\([^,]*\) *, *\(.*\)', '\2', "")
         " PHP5 type hint?
         let l:paramtype = substitute (_p, g:pdv_re_param, '\1', "")
+        " Nullable types for PHP7.1 
+        let l:paramtype = substitute (l:paramtype, "?", "null|", "")
         " Parameter name
         let l:paramname = substitute (_p, g:pdv_re_param, '\2', "")
         " Parameter default
